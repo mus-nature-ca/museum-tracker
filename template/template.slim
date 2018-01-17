@@ -1,0 +1,60 @@
+doctype html
+html
+  head
+    title Canadian Museum of Nature Citation Tracker
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    meta name="ROBOTS" content="NOINDEX, NOFOLLOW"
+    link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"
+    css:
+      .success{text-align:center;}
+      .orcid{vertical-align:middle; margin-right:4px;}
+
+  body
+    .container-fluid
+      .jumbotron
+        h1 Canadian Museum of Nature Citation Tracker
+        p.lede Started: 2017-11-25
+        p.lede Last generated: #{generation_time}
+
+      table#citations.table.table-striped
+        thead
+          tr
+            th(style="width:10%") Print Date
+            th(style="width:5%;text-align:center") Authored By Staff
+            th(style="width:5%;text-align:center") Citing CMN Works
+            th(style="width:20%") Specimens Cited
+            th(style="width:50%") Reference
+            th(style="width:10%") Created
+        tbody
+          - entries.each do |entry|
+            tr
+              td = entry[:print_date]
+              - if entry[:possible_authorship]
+                td.success &#10004;
+              - else
+                td
+              - if entry[:possible_citation]
+                td.success &#10004;
+              - else
+                td
+              - if entry[:specimens].length > 0
+                td.info = entry[:specimens]
+              - else
+                td
+              td 
+                = entry[:formatted]
+                - if entry[:formatted]
+                  br
+                - url = entry[:url]
+                - formatted_url = (url.length > 70) ? "#{url[0..69]}&hellip;" : url
+                a href="#{url}" == formatted_url
+                - if entry[:doi] && entry[:url] != "https://doi.org/#{entry[:doi]}"
+                  br
+                  a href="https://doi.org/#{entry[:doi]}" == "https://doi.org/#{entry[:doi]}"
+                - entry[:orcids].each do |orcid|
+                    br
+                    a href="https://orcid.org/#{orcid}"
+                        img src="images/orcid_16X16.gif" class="orcid"/
+                    a href="https://orcid.org/#{orcid}" == "https://orcid.org/#{orcid}"
+              td = entry[:created]

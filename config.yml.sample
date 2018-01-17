@@ -1,0 +1,32 @@
+development:
+  adapter: mysql2
+  host: localhost
+  port: 
+  database: cmn_scholar
+  username: root
+  password:
+  gmail:
+      application_name: Gmail API Ruby
+      label: Scholar
+
+test:
+  adapter: mysql2
+  host: localhost
+  port: 
+  database: cmn_scholar_test
+  username: root
+  password:
+  gmail:
+      application_name: Gmail API Ruby
+      label: Scholar
+
+production:
+  adapter: mysql2
+  host: localhost
+  port: 
+  database: cmn_scholar
+  username: root
+  password:
+  gmail:
+      application_name: Gmail API Ruby
+      label: Scholar

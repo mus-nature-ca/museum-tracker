@@ -1,0 +1,143 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    Ascii85 (1.0.2)
+    activesupport (5.1.4)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (~> 0.7)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    addressable (2.5.2)
+      public_suffix (>= 2.0.2, < 4.0)
+    afm (0.2.2)
+    bibtex-ruby (4.4.4)
+      latex-decode (~> 0.0)
+    byebug (9.1.0)
+    colorize (0.8.1)
+    concurrent-ruby (1.0.5)
+    declarative (0.0.10)
+    declarative-option (0.1.0)
+    diff-lcs (1.3)
+    ethon (0.11.0)
+      ffi (>= 1.3.0)
+    faraday (0.13.1)
+      multipart-post (>= 1.2, < 3)
+    ffi (1.9.18)
+    google-api-client (0.17.4)
+      addressable (~> 2.5, >= 2.5.1)
+      googleauth (>= 0.5, < 0.7.0)
+      httpclient (>= 2.8.1, < 3.0)
+      mime-types (~> 3.0)
+      representable (~> 3.0)
+      retriable (>= 2.0, < 4.0)
+    googleauth (0.6.2)
+      faraday (~> 0.12)
+      jwt (>= 1.4, < 3.0)
+      logging (~> 2.0)
+      memoist (~> 0.12)
+      multi_json (~> 1.11)
+      os (~> 0.9)
+      signet (~> 0.7)
+    hashery (2.1.2)
+    httpclient (2.8.3)
+    i18n (0.9.1)
+      concurrent-ruby (~> 1.0)
+    jwt (2.1.0)
+    latex-decode (0.3.1)
+    little-plugger (1.1.4)
+    logging (2.2.2)
+      little-plugger (~> 1.1)
+      multi_json (~> 1.10)
+    memoist (0.16.0)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
+    mini_magick (4.8.0)
+    mini_portile2 (2.3.0)
+    minitest (5.10.3)
+    multi_json (1.12.2)
+    multipart-post (2.0.0)
+    mysql2 (0.4.10)
+    nokogiri (1.8.1)
+      mini_portile2 (~> 2.3.0)
+    os (0.9.6)
+    parallel (1.12.1)
+    pdf-reader (2.0.0)
+      Ascii85 (~> 1.0.0)
+      afm (~> 0.2.1)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
+    public_suffix (3.0.1)
+    rake (12.3.0)
+    representable (3.0.4)
+      declarative (< 0.1.0)
+      declarative-option (< 0.2.0)
+      uber (< 0.2.0)
+    retriable (3.1.1)
+    rspec (3.7.0)
+      rspec-core (~> 3.7.0)
+      rspec-expectations (~> 3.7.0)
+      rspec-mocks (~> 3.7.0)
+    rspec-core (3.7.0)
+      rspec-support (~> 3.7.0)
+    rspec-expectations (3.7.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.7.0)
+    rspec-mocks (3.7.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.7.0)
+    rspec-support (3.7.0)
+    rtesseract (2.1.0)
+      nokogiri
+    ruby-rc4 (0.1.5)
+    sequel (5.3.0)
+    signet (0.8.1)
+      addressable (~> 2.3)
+      faraday (~> 0.9)
+      jwt (>= 1.5, < 3.0)
+      multi_json (~> 1.10)
+    slim (3.0.9)
+      temple (>= 0.7.6, < 0.9)
+      tilt (>= 1.3.3, < 2.1)
+    socksify (1.7.1)
+    temple (0.8.0)
+    thread_safe (0.3.6)
+    tilt (2.0.8)
+    tor_requests (0.6.0)
+      socksify
+    ttfunk (1.5.1)
+    typhoeus (1.3.0)
+      ethon (>= 0.9.0)
+    tzinfo (1.2.4)
+      thread_safe (~> 0.1)
+    uber (0.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  activesupport
+  addressable
+  bibtex-ruby
+  byebug
+  colorize
+  google-api-client
+  mini_magick
+  mysql2
+  nokogiri
+  parallel
+  pdf-reader
+  rake
+  rspec
+  rtesseract
+  sequel
+  slim
+  tor_requests
+  typhoeus
+
+RUBY VERSION
+   ruby 2.4.1p111
+
+BUNDLED WITH
+   1.16.0
