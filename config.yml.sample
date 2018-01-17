@@ -2,7 +2,7 @@ development:
   adapter: mysql2
   host: localhost
   port: 
-  database: cmn_scholar
+  database: museum_tracker_development
   username: root
   password:
   gmail:
@@ -13,7 +13,7 @@ test:
   adapter: mysql2
   host: localhost
   port: 
-  database: cmn_scholar_test
+  database: museum_tracker_test
   username: root
   password:
   gmail:
@@ -24,7 +24,7 @@ production:
   adapter: mysql2
   host: localhost
   port: 
-  database: cmn_scholar
+  database: museum_tracker
   username: root
   password:
   gmail:

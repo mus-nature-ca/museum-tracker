@@ -18,14 +18,15 @@ Configuration
 5. $ bundle install
 6. First time execution of ./bin/app.rb will prompt to visit a URL, then copy secret code into command line, subsequent executions will use cached secret from above
 7. Adjust contents of regex.yml.sample and config.yml.sample and rename regex.yml and config.yml, respectively
+8. Set-up MySQL db from /db
 
 PDF download and scan status codes used
 ---------------------------------------
-# 0 pending, default on record creation
-# 1 first pass at downloading PDF directly from publisher failed
-# 2 second pass at downloading PDF from sci-hub failed, no further attempts will be made
-# 3 PDF downloaded, not yet scanned
-# 4 PDF scan complete
+- 0 pending, default on record creation
+- 1 first pass at downloading PDF directly from publisher failed
+- 2 second pass at downloading PDF from sci-hub failed, no further attempts will be made
+- 3 PDF downloaded, not yet scanned
+- 4 PDF scan complete
 
 License
 -------
