@@ -1,2 +1,2 @@
 search_phrase_regex: !ruby/regexp '/\bCanadian\s*Museum\s*of\s*Nature\b|\bMusée\s*canadien\s*de\s*la\s*nature\b|\bNational\s*Museum\s*of\s*Natural\s*Sciences\b/i'
-specimen_codes_regex: !ruby/regexp '/\bC[AM]N[ABCEFILMNPRVY]{0,3}\s+[A-Z0-9]{1}[a-zA-Z0-9.()-]{0,}\b|\bN[BIFMCPUV]{1,3}\s+[0-9]{1,}\b|\b[JKLO][bcdfghijk][DFJLMN][acfhjmnorst]\-[0-9]{4}\:[0-9]{1,}[a-z]?\b/'
+specimen_codes_regex: !ruby/regexp '/\bC[AM]N[ABCEFILMNPRVY]{0,3}[\s+-][A-Z0-9]{1}[a-zA-Z0-9.()-]{0,}\b|\bN[BIFMCPUV]{1,3}\s+[0-9]{1,}\b|\b[JKLO][bcdfghijk][DFJLMN][acfhjmnorst]\-[0-9]{4}\:[0-9]{1,}[a-z]?\b/'

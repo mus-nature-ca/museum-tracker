@@ -78,7 +78,8 @@ class EntityExtractor
     if !@options[:specimen_codes_regex]
       raise RuntimeError, 'Missing :specimen_codes_regex in option'
     end
-    txt.scan(@options[:specimen_codes_regex]).flatten.map{|o| o.strip.gsub(/\s+/, " ") }.uniq.sort
+    txt.scan(@options[:specimen_codes_regex])
+       .flatten.map{|o| o.strip.gsub(/\s+/, " ") }.uniq.sort
   end
 
   def orcids(txt)
@@ -95,7 +96,8 @@ class EntityExtractor
   def coordinates(txt)
     #dd coordinates
     coord_pattern = /([-+]?\d{1,2}[.]\d+),\s*([-+]?\d{1,3}[.]\d+)/
-    coords = txt.scan(coord_pattern).map{|o| { lat: o[0].to_f, lng: o[1].to_f }}.flatten
+    coords = txt.scan(coord_pattern)
+                .map{|o| { lat: o[0].to_f, lng: o[1].to_f }}.flatten
     #dms coordinates
     coord_pattern = /([0-9]{1,2})[d°º]([0-9]{1,2})?\s*?[m'′]?([0-9]{1,2}(?:\.[0-9]+){0,1})?[s"″]?\s*([NS]),\s*([0-9]{1,3})[d°º]([0-9]{1,2})?\s*?[m'′]?([0-9]{1,2}(?:\.[0-9]+){0,1})?[s"″]?\s*?([EWO])/
     #TODO: convert to DD once extracted

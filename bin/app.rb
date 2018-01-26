@@ -34,6 +34,10 @@ optparse = OptionParser.new do |opts|
     options[:file] = file
   end
 
+  opts.on("-u", "--url [URL]", String, "Include a URL to a PDF file") do |url|
+    options[:url] = url
+  end
+
 end
 
 begin
@@ -46,6 +50,9 @@ begin
 
   if options[:file]
     mt.insert_file(options[:file], options[:doi])
+  elsif options[:url]
+    mt.insert_url(options[:url], options[:doi])
+    mt.queue_and_run
   elsif options[:doi]
     mt.insert_doi(options[:doi])
     puts "Gathering PDFs...".yellow

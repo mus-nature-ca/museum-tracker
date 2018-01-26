@@ -78,6 +78,18 @@ class MuseumTracker
     @db[:citations].insert(citation)
   end
 
+  def insert_url(url, doi = nil)
+    md5 = Digest::MD5.hexdigest(url)
+    citation = {
+      md5: md5,
+      url: url,
+      doi: doi,
+      status: 0,
+      created: Time.now.strftime('%Y-%m-%d %H:%M:%S')
+    }
+    @db[:citations].insert(citation)
+  end
+
   def insert_doi(doi)
     md5 = Digest::MD5.hexdigest(doi)
     citation = {
