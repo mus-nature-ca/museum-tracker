@@ -104,7 +104,7 @@ class MuseumTracker
 
   def queue_and_run
     hydra = Typhoeus::Hydra.hydra
-    @db[:citations].where(status: 0).all.in_groups_of(5).each do |group|
+    @db[:citations].where(status: 0).all.in_groups_of(5, false).each do |group|
       group.each do |citation|
         req = request(citation)
         hydra.queue req if !req.nil?
