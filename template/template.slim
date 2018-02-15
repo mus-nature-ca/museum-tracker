@@ -14,8 +14,13 @@ html
     .container-fluid
       .jumbotron
         h1 Canadian Museum of Nature Citation Tracker
-        p.lede Started: 2017-11-25
-        p.lede Last generated: #{generation_time}
+        p.lede 
+            strong Started
+            ': 2017-11-25 
+            strong Last generated
+            ': #{generation_time} 
+            strong
+                a href="https://github.com/mus-nature-ca/museum-tracker" Code
 
       table#citations.table.table-striped
         thead
