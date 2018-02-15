@@ -16,6 +16,7 @@ gem 'rtesseract'
 gem 'mini_magick'
 gem 'parallel'
 gem 'colorize'
+gem 'serrano'
 
 group :production do
 end

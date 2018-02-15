@@ -20,6 +20,7 @@ require 'rtesseract'
 require 'mini_magick'
 require 'parallel'
 require 'colorize'
+require 'serrano'
 require 'byebug'
 
 Dir[File.dirname(__FILE__) + "/lib/*.rb"].each{ |file| require file }

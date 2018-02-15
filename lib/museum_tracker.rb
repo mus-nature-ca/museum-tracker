@@ -60,7 +60,7 @@ class MuseumTracker
     end
 
     citations.uniq! { |e| e[:url] }
-    citations.map { |citation| @db[:citations].insert(citation) }
+    citations.map { |citation| insert_citation(citation) }
   end
 
   def insert_file(path, doi = nil)
@@ -75,7 +75,7 @@ class MuseumTracker
       created:  Time.now.strftime('%Y-%m-%d %H:%M:%S')
     }
     FileUtils.cp(path, citation_pdf(citation))
-    @db[:citations].insert(citation)
+    insert_citation(citation)
   end
 
   def insert_url(url, doi = nil)
@@ -87,7 +87,7 @@ class MuseumTracker
       status: 0,
       created: Time.now.strftime('%Y-%m-%d %H:%M:%S')
     }
-    @db[:citations].insert(citation)
+    insert_citation(citation)
   end
 
   def insert_doi(doi)
@@ -99,14 +99,14 @@ class MuseumTracker
       status: 1,
       created:  Time.now.strftime('%Y-%m-%d %H:%M:%S')
     }
-    @db[:citations].insert(citation)
+    insert_citation(citation)
   end
 
   def queue_and_run
     hydra = Typhoeus::Hydra.hydra
     @db[:citations].where(status: 0).all.in_groups_of(5, false).each do |group|
       group.each do |citation|
-        req = request(citation)
+        req = queued_request(citation)
         hydra.queue req if !req.nil?
       end
       hydra.run
@@ -120,17 +120,39 @@ class MuseumTracker
       doc = Nokogiri::HTML(req.body)
       url = doc.xpath("//*/iframe[@id='pdf']").first.attributes["src"].value rescue nil
       if url.nil?
-        update_status(citation, 2)
+        citation[:status] = 2
+        update_citation(citation)
       else
-        second_req = Typhoeus.get("http:#{url}")
-        pdf = citation_pdf(citation)
-        File.open(pdf, 'wb') { |file| file.write(second_req.body) }
-        if valid_pdf(pdf)
-          update_status(citation, 3)
-        else
-          File.delete pdf
-          update_status(citation, 2)
+        single_request(citation, "http:#{url}")
+      end
+    end
+  end
+
+  def single_request(citation, url)
+    req = Typhoeus.get(url)
+    pdf = citation_pdf(citation)
+    File.open(pdf, 'wb') { |file| file.write(req.body) }
+    if valid_pdf(pdf)
+      citation[:status] = 3
+      update_citation(citation)
+    else
+      File.delete pdf
+      citation[:status] = 2
+      update_citation(citation)
+    end
+  end
+
+  def send_crossref_requests
+    @db[:citations].where(status: [1,2]).exclude(doi: nil).each do |citation|
+      begin
+        work = Serrano.works(ids: citation[:doi]).first
+        work["message"]["link"].each do |url|
+          if url["content-type"] == "application/pdf"
+            single_request(citation, url["URL"])
+            break
+          end
         end
+      rescue
       end
     end
   end
@@ -161,7 +183,7 @@ class MuseumTracker
       end
 
       citation[:status] = 4
-      @db[:citations].where(md5: citation[:md5]).update(citation)
+      update_citation(citation)
     end
   end
 
@@ -269,8 +291,14 @@ class MuseumTracker
     mime_type.include?("application/pdf")
   end
 
-  def update_status(citation, status)
-    @db[:citations].where(md5: citation[:md5]).update(status: status)
+  def insert_citation(citation)
+    @db[:citations].insert(citation)
+  end
+
+  def update_citation(citation)
+    md5 = citation[:md5]
+    citation.delete(:md5)
+    @db[:citations].where(md5: md5).update(citation)
   end
 
   def gmail_authorize
@@ -321,7 +349,7 @@ class MuseumTracker
     uri.query_values["url"]
   end
 
-  def request(citation)
+  def queued_request(citation)
     pdf = citation_pdf(citation)
     url = citation[:url]
     downloaded_file = File.open pdf, 'wb'
@@ -333,10 +361,16 @@ class MuseumTracker
     req.on_complete do |response|
       downloaded_file.close
       if valid_pdf(pdf)
-        update_status(citation, 3)
+        citation[:status] = 3
+        update_citation(citation)
       else
+        citation[:status] = 1
+        doi = extract_doi(File.read(pdf))
+        if citation[:doi].nil? && doi
+          citation[:doi] = doi
+        end
         File.delete pdf
-        update_status(citation, 1)
+        update_citation(citation)
       end
     end
     req
