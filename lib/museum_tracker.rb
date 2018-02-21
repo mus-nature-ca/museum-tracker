@@ -195,23 +195,23 @@ class MuseumTracker
     LEFT JOIN metadata m ON c.id = m.citation_id 
     WHERE m.id IS NULL AND c.doi IS NOT NULL"
     @db[sql].each do |row|
-      bib = doi_metadata(row[:doi], "bibtex")
-      formatted = doi_metadata(row[:doi], "biblio")
+      bib = doi_metadata(row[:doi], "bibtex") rescue nil
+      formatted = doi_metadata(row[:doi], "biblio") rescue nil
       json = JSON.parse(doi_metadata(row[:doi], "csl+json")) rescue nil
       print_date = json["published-print"]["date-parts"][0].join("-") rescue nil
       if print_date.nil?
         print_date = json["published-online"]["date-parts"][0].join("-") rescue nil
       end
       year = BibTeX.parse(bib).first.year.to_i rescue nil
+      data = {
+        citation_id: row[:id],
+        year: year,
+        print_date: print_date,
+        bibtex: bib,
+        formatted: formatted
+      }
+      @db[:metadata].insert(data)
       if bib && formatted
-        data = {
-          citation_id: row[:id],
-          year: year,
-          print_date: print_date,
-          bibtex: bib,
-          formatted: formatted
-        }
-        @db[:metadata].insert(data)
         bibtex << data
       end
     end
@@ -280,7 +280,11 @@ class MuseumTracker
 
     begin
       req = Typhoeus.get(url, headers: header, followlocation: true)
-      req.response_body
+      if req.response_code == 200
+        req.response_body
+      else
+        nil
+      end
     rescue
       nil
     end
