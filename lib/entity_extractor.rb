@@ -63,7 +63,8 @@ class EntityExtractor
       possible_citation: contains_phrase?(last_2_pages),
       museum_codes: specimen_codes(all_pages),
       dois: dois(all_pages),
-      orcids: orcids(all_pages)
+      orcids: orcids(all_pages),
+      coordinates: coordinates(all_pages)
     }
   end
 
@@ -92,19 +93,35 @@ class EntityExtractor
     txt.scan(doi_pattern).flatten.uniq
   end
 
-  #WIP
   def coordinates(txt)
     #dd coordinates
-    coord_pattern = /([-+]?\d{1,2}[.]\d+),\s*([-+]?\d{1,3}[.]\d+)/
-    coords = txt.scan(coord_pattern)
-                .map{|o| { lat: o[0].to_f, lng: o[1].to_f }}.flatten
+    coords = []
+    coord_pattern_dd = /([-+]?\d{1,2}[.]\d+)[d°º]?[NS]?,\s*([-+]?\d{1,3}[.]\d+)[d°º]?[EWO]?/
+    coords << txt.scan(coord_pattern_dd)
+                .map{|o| { lat: o[0].to_f, lng: o[1].to_f }}
+
     #dms coordinates
-    coord_pattern = /([0-9]{1,2})[d°º]([0-9]{1,2})?\s*?[m'′]?([0-9]{1,2}(?:\.[0-9]+){0,1})?[s"″]?\s*([NS]),\s*([0-9]{1,3})[d°º]([0-9]{1,2})?\s*?[m'′]?([0-9]{1,2}(?:\.[0-9]+){0,1})?[s"″]?\s*?([EWO])/
-    #TODO: convert to DD once extracted
-    coords
+    coord_pattern_dms = /([0-9]{1,2})[d°º]([0-9]{1,2}(?:\.[0-9]+){0,1})?\s*?[m'′]?([0-9]{1,2}(?:\.[0-9]+){0,1})?[s"″]?\s*([NS]),\s*([0-9]{1,3})[d°º]([0-9]{1,2}(?:\.[0-9]+){0,1})?\s*?[m'′]?([0-9]{1,2}(?:\.[0-9]+){0,1})?[s"″]?\s*?([EWO])/
+    coords << txt.scan(coord_pattern_dms)
+                 .map{|o| convert_dms(o)}
+    coords.uniq.flatten
   end
 
   private
+
+  def convert_dms(o)
+    lat_prefix = 1
+    if o[3] == "S"
+      lat_prefix = -1
+    end
+    lng_prefix = 1
+    if o[7] == "W" || o[7] == "O"
+      lng_prefix = -1
+    end
+    lat = lat_prefix * (o[0].to_f + o[1].to_f/60 + o[2].to_f/3600)
+    lng = lng_prefix * (o[4].to_f + o[5].to_f/60 + o[6].to_f/3600)
+    { lat: lat, lng:  lng }
+  end
 
   def ocr
     doc = {}

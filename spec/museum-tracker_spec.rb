@@ -58,13 +58,29 @@ describe "EntityExtractor" do
   end
 
   describe ".coordinates" do
-#    it "recognized geographic coordinates as DMS in text" do
-#      txt = "Rodadero Bay, Magdalena, northern Colombia (11°N, 74°W)."
-#      expect(ee.coordinates(txt)).to eq []
-#    end
-    it "recognized geographic coordinates as DD in text" do
+    it "recognized geographic coordinates as DMS without MS in text" do
+      txt = "Rodadero Bay, Magdalena, northern Colombia (11°N, 74°W)."
+      expect(ee.coordinates(txt)).to eq [{ lat: 11.0, lng: -74.0 }]
+    end
+    it "recognizes geographic coordinates as full DMS in text" do
+      txt = "Fanar 33°52'44\"N, 35°34'04\"E"
+      expect(ee.coordinates(txt)).to eq [{ lat: 33.87888888888889, lng: 35.56777777777778 }]
+    end
+    it "recognizes geographic coordinates as DM deg S in text" do
+      txt = "Hasbaya 33°23'52.35\"N, 35°41.6'6.59\"W"
+      expect(ee.coordinates(txt)).to eq [{ lat: 33.397875, lng: -35.69516388888889 }]
+    end
+    it "recognizes geographic coordinates as DD in text" do
       txt = "Rodadero Bay, Magdalena, northern Colombia (11.24, -74.20)."
       expect(ee.coordinates(txt)).to eq [{ lat: 11.24, lng: -74.20 }]
+    end
+    it "recognizes geographic coordinates as DD with symbols and direction" do
+      txt = "Diaoluoshan, Xin-an, 18.72510°N, 109.86861°E, 921m"
+      expect(ee.coordinates(txt)).to eq [{ lat: 18.7251, lng: 109.86861 }]
+    end
+    it "recognizes 2 geographic coordinates as DD and DMS in text" do
+      txt = "Rodadero Bay, Magdalena, northern Colombia (11.24, -74.20) and Hasbaya 33°23'52.35\"N, 35°41.6'6.59\"W."
+      expect(ee.coordinates(txt)).to eq [{ lat: 11.24, lng: -74.2 }, { lat: 33.397875, lng:-35.69516388888889 }]
     end
     it "does not recognize geographic coordinates as DD in text when there is just one number" do
       txt = "Rodadero Bay, Magdalena, northern Colombia 11.24 and elsewhere."
