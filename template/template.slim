@@ -52,11 +52,14 @@ html
                 = entry[:formatted]
                 - if entry[:formatted]
                   br
-                - url = entry[:url]
-                - formatted_url = (url.length > 70) ? "#{url[0..69]}&hellip;" : url
-                a href="#{url}" == formatted_url
-                - if entry[:doi] && entry[:url] != "https://doi.org/#{entry[:doi]}"
+                - if entry[:url]
+                  - url = entry[:url]
+                  - formatted_url = (url.length > 70) ? "#{url[0..69]}&hellip;" : url
+                  a href="#{url}" == formatted_url
+                - if entry[:doi] && !entry[:url].nil? && entry[:url] != "https://doi.org/#{entry[:doi]}"
                   br
+                  a href="https://doi.org/#{entry[:doi]}" == "https://doi.org/#{entry[:doi]}"
+                - if entry[:doi] && entry[:url].nil?
                   a href="https://doi.org/#{entry[:doi]}" == "https://doi.org/#{entry[:doi]}"
                 - entry[:orcids].each do |orcid|
                     br

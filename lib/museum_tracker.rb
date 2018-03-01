@@ -69,7 +69,7 @@ class MuseumTracker
     md5 = Digest::MD5.hexdigest(path)
     citation = {
       md5: md5,
-      url: "/pdfs/#{md5}.pdf",
+      url: nil,
       doi: doi,
       status: 3,
       created:  Time.now.strftime('%Y-%m-%d %H:%M:%S')
