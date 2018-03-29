@@ -6,9 +6,21 @@ html
     meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"
     meta name="ROBOTS" content="NOINDEX, NOFOLLOW"
     link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"
+    link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css"
+    script src="https://code.jquery.com/jquery-1.12.4.js"
+    script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"
+    script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
+    script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"
     css:
       .success{text-align:center;}
       .orcid{vertical-align:middle; margin-right:4px;}
+    javascript:
+      $(function() {
+        $('#citations').DataTable({
+          order: [[5, "desc"]],
+          "pageLength": 100
+        });
+      });
 
   body
     .container-fluid
@@ -23,7 +35,7 @@ html
                 a href="https://github.com/mus-nature-ca/museum-tracker" Code
         p.lede This project is in incubation status, is incomplete, and is unstable. It has yet to be fully endorsed by the Canadian Museum of Nature and is unlikely to persist.
 
-      table#citations.table.table-striped
+      table#citations.table.table-striped.table-bordered
         thead
           tr
             th(style="width:10%") Print Date
