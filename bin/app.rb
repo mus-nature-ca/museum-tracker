@@ -26,6 +26,10 @@ optparse = OptionParser.new do |opts|
     options[:trash] = true
   end
 
+  opts.on("-o", "--output", "Make a csv and put in public directory") do
+    options[:csv] = true
+  end
+
   opts.on("-d", "--doi [DOI]", String, "Include a DOI to a paper") do |doi|
     options[:doi] = doi
   end
@@ -77,6 +81,11 @@ begin
   mt.update_metadata
 
   mt.write_webpage
+
+  if options[:csv]
+    mt.write_csv
+  end
+
   puts "Done".green
 
 rescue

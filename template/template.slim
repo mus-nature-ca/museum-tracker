@@ -57,7 +57,7 @@ html
               - else
                 td
               - if entry[:specimens].length > 0
-                td.info = entry[:specimens]
+                td.info = entry[:specimens].join(", ")
               - else
                 td
               td 

@@ -218,8 +218,39 @@ class MuseumTracker
     bibtex
   end
 
+  def write_csv
+    csv_file = File.join(root, 'public', 'publications.csv')
+    CSV.open(csv_file, 'w') do |csv|
+      csv << ["doi", "url", "formatted", "possible_authorship", "possible_citation", "print_date", "created", "specimens", "orcids"]
+      output[:entries].each do |entry|
+        csv << [
+          entry[:doi],
+          entry[:url],
+          entry[:formatted],
+          entry[:possible_authorship],
+          entry[:possible_citation],
+          entry[:print_date],
+          entry[:created],
+          entry[:specimens].join("; "),
+          entry[:orcids].join("; ")
+        ]
+      end
+    end
+    
+  end
+
   def write_webpage
-    output = {
+    template = File.join(root, 'template', "template.slim")
+    web_page = File.join(root, 'index.html')
+    html = Slim::Template.new(template).render(Object.new, output)
+    File.open(web_page, 'w') { |file| file.write(html) }
+    html
+  end
+
+  private
+
+  def output
+    data = {
       generation_time: Time.now.strftime('%Y-%m-%d %H:%M:%S'),
       entries: []
     }
@@ -240,19 +271,13 @@ class MuseumTracker
     @db[sql].each do |row|
       extras = { 
         specimens: @db[:specimens].where(citation_id: row[:id])
-                                  .all.map{ |s| s[:specimen_code] }.join(", "),
+                                  .all.map{ |s| s[:specimen_code] },
         orcids: @db[:orcids].where(citation_id: row[:id]).select_map(:orcid)
       }
-      output[:entries] << row.merge(extras)
+      data[:entries] << row.merge(extras)
     end
-    template = File.join(root, 'template', "template.slim")
-    web_page = File.join(root, 'index.html')
-    html = Slim::Template.new(template).render(Object.new, output)
-    File.open(web_page, 'w') { |file| file.write(html) }
-    html
+    data
   end
-
-  private
 
   def root
     File.dirname(File.dirname(__FILE__))
