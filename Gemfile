@@ -17,6 +17,7 @@ gem 'mini_magick'
 gem 'parallel'
 gem 'colorize'
 gem 'serrano'
+gem 'write_xlsx'
 
 group :production do
 end

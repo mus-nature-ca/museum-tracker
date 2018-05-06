@@ -30,6 +30,10 @@ optparse = OptionParser.new do |opts|
     options[:csv] = true
   end
 
+  opts.on("-x", "--excel", "Make an Excle file and put in public directory") do
+    options[:excel] = true
+  end
+  
   opts.on("-d", "--doi [DOI]", String, "Include a DOI to a paper") do |doi|
     options[:doi] = doi
   end
@@ -84,6 +88,10 @@ begin
 
   if options[:csv]
     mt.write_csv
+  end
+
+  if options[:excel]
+    mt.write_xlsx
   end
 
   puts "Done".green

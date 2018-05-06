@@ -236,7 +236,36 @@ class MuseumTracker
         ]
       end
     end
-    
+  end
+
+  def write_xlsx
+    xlsx_file = File.join(root, 'public', 'publications.xlsx')
+    workbook = WriteXLSX.new(xlsx_file)
+
+    # Add a worksheet
+    worksheet = workbook.add_worksheet
+
+    # Write a formatted and unformatted string, row and column notation.
+    header = ["doi", "url", "formatted", "possible_authorship", "possible_citation", "print_date", "created", "specimens", "orcids"]
+    header.each_with_index do |v, i|
+      worksheet.write(0, i, v)
+    end
+
+    row = 1
+    output[:entries].each do |entry|
+      worksheet.write(row, 0, entry[:doi])
+      worksheet.write(row, 1, entry[:url])
+      worksheet.write(row, 2, entry[:formatted])
+      worksheet.write(row, 3, entry[:possible_authorship])
+      worksheet.write(row, 4, entry[:possible_citation])
+      worksheet.write(row, 5, entry[:print_date])
+      worksheet.write(row, 6, entry[:created])
+      worksheet.write(row, 7, entry[:specimens].join("; "))
+      worksheet.write(row, 8, entry[:orcids].join("; "))
+      row += 1
+    end
+
+    workbook.close
   end
 
   def write_webpage

@@ -93,6 +93,7 @@ GEM
     rtesseract (2.2.0)
       nokogiri
     ruby-rc4 (0.1.5)
+    rubyzip (1.2.1)
     sequel (5.5.0)
     serrano (0.3.6)
       faraday (~> 0.12.0.1)
@@ -120,6 +121,11 @@ GEM
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     uber (0.1.0)
+    write_xlsx (0.85.5)
+      rubyzip (>= 1.0.0)
+      zip-zip
+    zip-zip (0.3)
+      rubyzip (>= 1.0.0)
 
 PLATFORMS
   ruby
@@ -144,9 +150,10 @@ DEPENDENCIES
   slim
   tor_requests
   typhoeus
+  write_xlsx
 
 RUBY VERSION
    ruby 2.4.1p111
 
 BUNDLED WITH
-   1.16.0
+   1.16.1

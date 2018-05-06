@@ -22,5 +22,6 @@ require 'parallel'
 require 'colorize'
 require 'serrano'
 require 'byebug'
+require 'write_xlsx'
 
 Dir[File.dirname(__FILE__) + "/lib/*.rb"].each{ |file| require file }
