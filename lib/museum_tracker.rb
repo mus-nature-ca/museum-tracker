@@ -198,9 +198,9 @@ class MuseumTracker
       bib = doi_metadata(row[:doi], "bibtex") rescue nil
       formatted = doi_metadata(row[:doi], "biblio") rescue nil
       json = JSON.parse(doi_metadata(row[:doi], "csl+json")) rescue nil
-      print_date = json["published-print"]["date-parts"][0].join("-") rescue nil
+      print_date = format_pub_date(json["published-print"]["date-parts"][0].join("-")) rescue nil
       if print_date.nil?
-        print_date = json["published-online"]["date-parts"][0].join("-") rescue nil
+        print_date = format_pub_date(json["published-online"]["date-parts"][0].join("-")) rescue nil
       end
       year = BibTeX.parse(bib).first.year.to_i rescue nil
       data = {
@@ -451,6 +451,15 @@ class MuseumTracker
     end
     active_url = SCI_HUB_ONION if active_url.nil?
     active_url
+  end
+
+  def format_pub_date(txt)
+    date_pattern = /(?<year>\d{4})-?(?<month>\d{1,2})?-?(?<day>\d{1,2})?/
+    matches = txt.match(date_pattern)
+    year = !matches["year"].nil? ? matches["year"] : nil
+    month = !matches["month"].nil? ? matches["month"].rjust(2, "0") : nil
+    day = !matches["day"].nil? ? matches["day"].rjust(2, "0") : nil
+    [year, month, day].compact.join("-")
   end
 
 end
