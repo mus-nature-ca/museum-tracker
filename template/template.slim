@@ -62,7 +62,7 @@ html
               - else
                 td
               - if entry[:specimens].length > 0
-                td.info = entry[:specimens].join(", ")
+                td.info = entry[:specimens]
               - else
                 td
               td 
@@ -78,7 +78,7 @@ html
                   a href="https://doi.org/#{entry[:doi]}" == "https://doi.org/#{entry[:doi]}"
                 - if entry[:doi] && entry[:url].nil?
                   a href="https://doi.org/#{entry[:doi]}" == "https://doi.org/#{entry[:doi]}"
-                - entry[:orcids].each do |orcid|
+                - entry[:orcids].split(", ").each do |orcid|
                     br
                     a href="https://orcid.org/#{orcid}"
                         img src="images/orcid_16X16.gif" class="orcid"/

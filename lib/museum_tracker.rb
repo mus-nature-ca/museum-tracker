@@ -221,19 +221,10 @@ class MuseumTracker
   def write_csv
     csv_file = File.join(root, 'public', 'publications.csv')
     CSV.open(csv_file, 'w') do |csv|
-      csv << ["doi", "url", "formatted", "possible_authorship", "possible_citation", "print_date", "created", "specimens", "orcids"]
+      csv << output_header
+
       output[:entries].each do |entry|
-        csv << [
-          entry[:doi],
-          entry[:url],
-          entry[:formatted],
-          entry[:possible_authorship],
-          entry[:possible_citation],
-          entry[:print_date],
-          entry[:created],
-          entry[:specimens].join("; "),
-          entry[:orcids].join("; ")
-        ]
+        csv << output_header.map{ |i| entry[i.to_sym] }
       end
     end
   end
@@ -242,26 +233,17 @@ class MuseumTracker
     xlsx_file = File.join(root, 'public', 'publications.xlsx')
     workbook = WriteXLSX.new(xlsx_file)
 
-    # Add a worksheet
     worksheet = workbook.add_worksheet
 
-    # Write a formatted and unformatted string, row and column notation.
-    header = ["doi", "url", "formatted", "possible_authorship", "possible_citation", "print_date", "created", "specimens", "orcids"]
-    header.each_with_index do |v, i|
+    output_header.each_with_index do |v, i|
       worksheet.write(0, i, v)
     end
 
     row = 1
     output[:entries].each do |entry|
-      worksheet.write(row, 0, entry[:doi])
-      worksheet.write(row, 1, entry[:url])
-      worksheet.write(row, 2, entry[:formatted])
-      worksheet.write(row, 3, entry[:possible_authorship])
-      worksheet.write(row, 4, entry[:possible_citation])
-      worksheet.write(row, 5, entry[:print_date])
-      worksheet.write(row, 6, entry[:created])
-      worksheet.write(row, 7, entry[:specimens].join("; "))
-      worksheet.write(row, 8, entry[:orcids].join("; "))
+      (0..8).each do |i|
+        worksheet.write(row, i, entry[output_header[i].to_sym])
+      end 
       row += 1
     end
 
@@ -300,12 +282,29 @@ class MuseumTracker
     @db[sql].each do |row|
       extras = { 
         specimens: @db[:specimens].where(citation_id: row[:id])
-                                  .all.map{ |s| s[:specimen_code] },
-        orcids: @db[:orcids].where(citation_id: row[:id]).select_map(:orcid)
+                                  .all.map{ |s| s[:specimen_code] }
+                                  .join(", "),
+        orcids: @db[:orcids].where(citation_id: row[:id])
+                            .select_map(:orcid)
+                            .join(", ")
       }
       data[:entries] << row.merge(extras)
     end
     data
+  end
+
+  def output_header
+    [
+      "doi",
+      "url",
+      "formatted",
+      "possible_authorship",
+      "possible_citation",
+      "print_date",
+      "created",
+      "specimens",
+      "orcids"
+    ]
   end
 
   def root
