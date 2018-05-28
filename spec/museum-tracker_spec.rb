@@ -40,6 +40,10 @@ describe "EntityExtractor" do
       doi = "There are no DOIs here"
       expect(ee.dois(doi)).to eq []
     end
+    it "recognized messy DOI in text" do
+      doi = "10.1016/j.jaa.2018.05.004';"
+      expect(ee.dois(doi).first).to eq "10.1016/j.jaa.2018.05.004"
+    end
   end
 
   describe ".orcids" do

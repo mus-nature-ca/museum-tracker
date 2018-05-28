@@ -387,7 +387,7 @@ class MuseumTracker
 
   def extract_doi(txt)
     doi = nil
-    doi_pattern = /(10[.][0-9]{4,}(?:[.][0-9]+)*\/(?:(?![%"#? ])\S)+)/i
+    doi_pattern = /(10[.][0-9]{4,}(?:[.][0-9]+)*\/(?:(?![%"#?' ])\S)+)/i
     strip_out = %r{
       \/full|
       \/abstract|

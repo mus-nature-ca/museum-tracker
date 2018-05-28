@@ -89,7 +89,7 @@ class EntityExtractor
   end
 
   def dois(txt)
-    doi_pattern = /(10[.][0-9]{4,}(?:[.][0-9]+)*\/(?:(?![%"#? ])\S)+)/i
+    doi_pattern = /(10[.][0-9]{4,}(?:[.][0-9]+)*\/(?:(?![%"#?' ])\S)+)/i
     txt.scan(doi_pattern).flatten.uniq
   end
 
