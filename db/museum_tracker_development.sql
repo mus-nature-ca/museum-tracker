@@ -28,6 +28,7 @@ CREATE TABLE `citations` (
   `doi` varchar(255) DEFAULT NULL,
   `url` text NOT NULL,
   `status` smallint(1) NOT NULL DEFAULT '0',
+  `license` varchar(32) DEFAULT NULL,
   `possible_authorship` tinyint(1) DEFAULT NULL,
   `possible_citation` tinyint(1) DEFAULT NULL,
   `created` date NOT NULL

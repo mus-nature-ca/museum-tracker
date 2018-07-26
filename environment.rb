@@ -15,13 +15,11 @@ require 'pdf-reader'
 require 'bibtex'
 require 'slim'
 require 'yaml'
-require 'tor_requests'
 require 'rtesseract'
 require 'mini_magick'
 require 'parallel'
 require 'colorize'
 require 'serrano'
-require 'byebug'
 require 'write_xlsx'
 
 Dir[File.dirname(__FILE__) + "/lib/*.rb"].each{ |file| require file }

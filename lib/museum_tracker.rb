@@ -1,16 +1,8 @@
 # encoding: utf-8
 
-SCI_HUB_URLS = [
-  "https://sci-hub.la",
-  "https://sci-hub.hk",
-  "https://sci-hub.mn",
-  "https://sci-hub.name",
-  "https://sci-hub.tv",
-  "https://sci-hub.tw",
-  "https://tree.sci-hub.la"
+UNPAYWALL_URL = [
+  "http://api.unpaywall.org/v2/"
 ]
-
-SCI_HUB_ONION = "http://scihub22266oqcxt.onion"
 
 class MuseumTracker
 
@@ -52,7 +44,7 @@ class MuseumTracker
         md5 = Digest::MD5.hexdigest(url)
         doi = extract_doi(url)
         created = Time.now.strftime('%Y-%m-%d %H:%M:%S')
-        citations << { md5: md5, doi: doi, url: url, created: created }
+        citations << { md5: md5, url: url, doi: doi, status: 0, license: nil, created: created }
       end
       if @delete_messages
         service.delete_user_message("me", id)
@@ -72,6 +64,7 @@ class MuseumTracker
       url: nil,
       doi: doi,
       status: 3,
+      license: nil,
       created:  Time.now.strftime('%Y-%m-%d %H:%M:%S')
     }
     FileUtils.cp(path, citation_pdf(citation))
@@ -85,6 +78,7 @@ class MuseumTracker
       url: url,
       doi: doi,
       status: 0,
+      license: nil,
       created: Time.now.strftime('%Y-%m-%d %H:%M:%S')
     }
     insert_citation(citation)
@@ -97,6 +91,7 @@ class MuseumTracker
       url: "https://doi.org/" + URI.escape(doi),
       doi: doi,
       status: 1,
+      license: nil,
       created:  Time.now.strftime('%Y-%m-%d %H:%M:%S')
     }
     insert_citation(citation)
@@ -113,18 +108,22 @@ class MuseumTracker
     end
   end
 
-  def send_scihub_requests
+  def send_unpaywall_requests
     @db[:citations].where(status: 1).each do |citation|
-      slug = !citation[:doi].nil? ? citation[:doi] : citation[:url]
-      req = Typhoeus.get(active_scihub + "/#{slug}")
-      doc = Nokogiri::HTML(req.body)
-      url = doc.xpath("//*/iframe[@id='pdf']").first.attributes["src"].value rescue nil
-      if url.nil?
-        citation[:status] = 2
-        update_citation(citation)
-      else
-        single_request(citation, "http:#{url}")
+      if !citation[:doi].nil?
+        url = UNPAYWALL_URL + citation[:doi] + "?email=#{@config[:gmail][:email_address]}"
+        req = Typhoeus.get(url)
+        json = JSON.parse(req.response_body, symbolize_names: true)
+        pdf_url = json[:oa_locations].map{|o| o[:url_for_pdf]}.compact.first rescue nil
+        citation[:license] = json[:best_oa_location][:license] rescue nil
+        if pdf_url.nil?
+          citation[:status] = 2
+          update_citation(citation)
+        else
+          single_request(citation, pdf_url)
+        end
       end
+      
     end
   end
 
@@ -241,7 +240,7 @@ class MuseumTracker
 
     row = 1
     output[:entries].each do |entry|
-      (0..8).each do |i|
+      (0..9).each do |i|
         worksheet.write(row, i, entry[output_header[i].to_sym])
       end 
       row += 1
@@ -269,6 +268,7 @@ class MuseumTracker
         c.id,
         c.doi,
         c.url,
+        c.license,
         c.possible_authorship,
         c.possible_citation,
         m.formatted,
@@ -297,6 +297,7 @@ class MuseumTracker
     [
       "doi",
       "url",
+      "license",
       "formatted",
       "possible_authorship",
       "possible_citation",
@@ -435,21 +436,6 @@ class MuseumTracker
 
   def citation_pdf(citation)
     File.join(root, 'pdfs', "#{citation[:md5]}.pdf")
-  end
-
-  def active_scihub
-    active_url = nil
-    SCI_HUB_URLS.each do |url|
-      req = Typhoeus.head(url)
-      if req.response_code == 200
-        active_url = url
-        break
-      else
-        next
-      end
-    end
-    active_url = SCI_HUB_ONION if active_url.nil?
-    active_url
   end
 
   def format_pub_date(txt)

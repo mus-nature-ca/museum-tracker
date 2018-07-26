@@ -7,7 +7,6 @@ Requirements
 - Linux-based OS
 - ruby 2+
 - mysql
-- tor browser running with SOCKS v5 proxy on port 9050 (optional)
 
 Configuration
 -------------
@@ -24,7 +23,7 @@ PDF download and scan status codes used
 ---------------------------------------
 - 0: pending, default on record creation
 - 1: first pass at downloading PDF directly from publisher failed
-- 2: second passes at downloading PDF from sci-hub or from Crossref metadata failed, no further attempts will be made
+- 2: second pass at downloading PDF via unpaywall or from Crossref metadata failed, no further attempts will be made
 - 3: PDF downloaded, not yet scanned
 - 4: PDF scan complete
 

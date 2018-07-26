@@ -61,12 +61,12 @@ begin
   elsif options[:url]
     mt.insert_url(options[:url], options[:doi])
     mt.queue_and_run
-    mt.send_scihub_requests
+    mt.send_unpaywall_requests
     mt.send_crossref_requests
   elsif options[:doi]
     mt.insert_doi(options[:doi])
     puts "Gathering PDFs...".yellow
-    mt.send_scihub_requests
+    mt.send_unpaywall_requests
     mt.send_crossref_requests
   else
     citations = mt.new_gmail_citations
@@ -74,7 +74,7 @@ begin
       puts "#{citations.count} citations found. Processing...".green
       mt.queue_and_run
       puts "Gathering PDFs...".yellow
-      mt.send_scihub_requests
+      mt.send_unpaywall_requests
       mt.send_crossref_requests
     end
   end

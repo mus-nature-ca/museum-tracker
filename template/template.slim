@@ -47,7 +47,8 @@ html
             th(style="width:5%;text-align:center") Authored By Staff
             th(style="width:5%;text-align:center") Citing CMN Works
             th(style="width:20%") Specimens Cited
-            th(style="width:50%") Reference
+            th(style="width:45%") Reference
+            th(style="width:5%;text-align:center") License
             th(style="width:10%") Created
         tbody
           - entries.each do |entry|
@@ -83,4 +84,5 @@ html
                     a href="https://orcid.org/#{orcid}"
                         img src="images/orcid_16X16.gif" class="orcid"/
                     a href="https://orcid.org/#{orcid}" == "https://orcid.org/#{orcid}"
+              td = entry[:license]
               td = entry[:created]

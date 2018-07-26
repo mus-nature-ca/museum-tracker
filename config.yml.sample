@@ -6,6 +6,7 @@ development:
   username: root
   password:
   gmail:
+      email_address: me@gmail.com
       application_name: Gmail API Ruby
       label: Scholar
 
@@ -17,6 +18,7 @@ test:
   username: root
   password:
   gmail:
+      email_address: me@gmail.com
       application_name: Gmail API Ruby
       label: Scholar
 
@@ -28,5 +30,6 @@ production:
   username: root
   password:
   gmail:
+      email_address: me@gmail.com
       application_name: Gmail API Ruby
       label: Scholar
