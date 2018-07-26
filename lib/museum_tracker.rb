@@ -107,21 +107,18 @@ class MuseumTracker
   end
 
   def send_unpaywall_requests
-    @db[:citations].where(status: 1).each do |citation|
-      if !citation[:doi].nil?
-        url = UNPAYWALL_URL + citation[:doi] + "?email=#{@config[:gmail][:email_address]}"
-        req = Typhoeus.get(url)
-        json = JSON.parse(req.response_body, symbolize_names: true)
-        pdf_url = json[:oa_locations].map{|o| o[:url_for_pdf]}.compact.first rescue nil
-        citation[:license] = json[:best_oa_location][:license] rescue nil
-        if pdf_url.nil?
-          citation[:status] = 2
-          update_citation(citation)
-        else
-          single_request(citation, pdf_url)
-        end
+    @db[:citations].where(status: 1).exclude(doi: nil).each do |citation|
+      url = UNPAYWALL_URL + citation[:doi] + "?email=#{@config[:gmail][:email_address]}"
+      req = Typhoeus.get(url)
+      json = JSON.parse(req.response_body, symbolize_names: true)
+      pdf_url = json[:oa_locations].map{|o| o[:url_for_pdf]}.compact.first rescue nil
+      citation[:license] = json[:best_oa_location][:license] rescue nil
+      if pdf_url.nil?
+        citation[:status] = 2
+        update_citation(citation)
+      else
+        single_request(citation, pdf_url)
       end
-      
     end
   end
 
