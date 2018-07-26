@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-UNPAYWALL_URL = [
-  "http://api.unpaywall.org/v2/"
-]
+UNPAYWALL_URL = "http://api.unpaywall.org/v2/"
 
 class MuseumTracker
 
