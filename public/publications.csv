@@ -11,6 +11,8 @@ doi,url,license,formatted,possible_authorship,possible_citation,print_date,creat
 ",,,2018-09,2018-06-26,"",""
 10.1016/j.envpol.2018.04.008,https://www.sciencedirect.com/science/article/pii/S0269749117349412,,"Long, S.-X., Hamilton, P. B., Yang, Y., Wang, S., Huang, W., Chen, C., & Tao, R. (2018). Differential bioaccumulation of mercury by zooplankton taxa in a mercury-contaminated reservoir Guizhou China. Environmental Pollution, 239, 147–160. doi:10.1016/j.envpol.2018.04.008
 ",true,true,2018-08,2018-04-15,"",""
+10.1145/3230652,https://dl.acm.org/citation.cfm?id=3230652,,"Sikora, M., Russo, M., Đerek, J., & Jurčević, A. (2018). Soundscape of an Archaeological Site Recreated with Audio Augmented Reality. ACM Transactions on Multimedia Computing, Communications, and Applications, 14(3), 1–22. doi:10.1145/3230652
+",,,2018-07-24,2018-07-31,"",""
 10.5334/oq.40,https://www.openquaternary.com/articles/10.5334/oq.40/,,"Welker, M., Billings, S., Burns, J., & McClure, S. (2018). Roads and Military Provisioning During the French and Indian War
                         (1754–1763): The Faunal Remains of Fort Shirley, PA in Context. Open Quaternary, 4(1), 5. doi:10.5334/oq.40
 ",false,false,2018-07-16,2018-07-22,"",""
@@ -30,6 +32,10 @@ doi,url,license,formatted,possible_authorship,possible_citation,print_date,creat
 ",false,false,2018-07-01,2018-07-15,"",""
 10.1016/j.envsci.2018.04.007,https://www.sciencedirect.com/science/article/pii/S1462901118302521,,"Romero Manrique, D., Corral, S., & Guimarães Pereira, Â. (2018). Climate-related displacements of coastal communities in the Arctic: Engaging traditional knowledge in adaptation strategies and policies. Environmental Science & Policy, 85, 90–100. doi:10.1016/j.envsci.2018.04.007
 ",false,true,2018-07,2018-04-21,"",""
+10.1016/j.cretres.2018.07.012,https://www.sciencedirect.com/science/article/pii/S0195667118301265,,"Cumbaa, S. L., Day, R., Gingras, M., Haggart, J. W., Holmes, R. B., Murray, A. M., & Schröder-Adams, C. (2018). Lac des Bois, a locality in the Northern Western Interior Seaway (Canada) with Tethyan faunal connections during the Cenomanian/Turonian Thermal Maximum. Cretaceous Research. doi:10.1016/j.cretres.2018.07.012
+",true,false,2018-07,2018-07-28,CMN 17426,""
+10.1017/S0024282918000300,https://www.cambridge.org/core/journals/lichenologist/article/habitat-associations-and-distribution-model-for-fuscopannaria-leucosticta-in-nova-scotia-canada/FCE95DB86254CC7C7342548DC817A466,,"PEARSON, K., CAMERON, R., & MCMULLIN, R. T. (2018). Habitat associations and distribution model for Fuscopannaria leucosticta in Nova Scotia, Canada. The Lichenologist, 50(04), 487–497. doi:10.1017/s0024282918000300
+",true,false,2018-07,2018-07-28,"",""
 10.1017/jpa.2018.19,https://www.cambridge.org/core/journals/journal-of-paleontology/article/combined-mesowear-analysis-of-mexican-bison-antiquus-shows-a-generalist-diet-with-geographical-variation/7D925307AD1E888FA1EDCCEF367C70F0,,"Díaz-Sibaja, R., Jiménez-Hidalgo, E., Ponce-Saavedra, J., & García-Zepeda, M. L. (2018). A combined mesowear analysis of Mexican Bison antiquus shows a generalist diet with geographical variation. Journal of Paleontology, 1–10. doi:10.1017/jpa.2018.19
 ",,,2018-06-19,2018-06-26,"",""
 10.1017/RDC.2018.50,https://www.cambridge.org/core/journals/radiocarbon/article/an-assessment-of-marine-reservoir-corrections-for-radiocarbon-dates-on-walrus-from-the-foxe-basin-region-of-arctic-canada/9949D8456A2F25FC5C45AC9F533CEF83,,"Dyke, A. S., Savelle, J. M., Szpak, P., Southon, J. R., Howse, L., Desrosiers, P. M., & Kotar, K. (2018). An Assessment of Marine Reservoir Corrections for Radiocarbon Dates on Walrus from the Foxe Basin region of Arctic Canada. Radiocarbon, 1–15. doi:10.1017/rdc.2018.50
@@ -307,7 +313,7 @@ doi,url,license,formatted,possible_authorship,possible_citation,print_date,creat
 ,https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=2134&context=insectamundi,,,false,false,,2018-05-20,"",""
 ,http://www.citt.gc.ca/en/node/8271,,,,,,2018-05-29,"",""
 ,http://books.google.ca/books?hl=en&lr=lang_en&id=xXRgDwAAQBAJ&oi=fnd&pg=PA56&dq=%22Canadian+Museum+of+Nature%22&ots=v5nkYbiBNp&sig=veeJ191ffZ2IkDY8O3BZhxPe32Y,,,,,,2018-06-26,"",""
-,https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=1161&context=entomologypapers,,,,,,2018-07-04,"",""
+,https://digitalcommons.unl.edu/cgi/viewcontent.cgi?article=1161&context=entomologypapers,,,false,false,,2018-07-04,CMNC CASC,""
 ,https://www.ajhtl.com/uploads/7/1/6/3/7163688/article_50_vol_7_2__2018.pdf,,,false,false,,2018-07-08,"",""
 ,http://www.citt-tcce.gc.ca/en/node/8334,,,,,,2018-07-10,"",""
 ,https://www.sararegistry.gc.ca/default.asp?lang=En&n=9CA194D5-1&offset=3&toc=show,,,false,false,,2018-07-10,"",""

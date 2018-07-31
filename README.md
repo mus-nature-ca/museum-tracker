@@ -26,6 +26,7 @@ PDF download and scan status codes used
 - 2: second pass at downloading PDF via unpaywall or from Crossref metadata failed, no further attempts will be made
 - 3: PDF downloaded, not yet scanned
 - 4: PDF scan complete
+- 5: Failed extractions
 
 License
 -------

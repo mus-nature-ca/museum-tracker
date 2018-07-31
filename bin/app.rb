@@ -79,11 +79,15 @@ begin
     end
   end
 
+  mt.queue_and_run
+  
   puts "Extracting entities...".yellow
   mt.extract_entities
+  
   puts "Updating metadata...".yellow
   mt.update_metadata
 
+  puts "Writing webpage...".yellow
   mt.write_webpage
 
   if options[:csv]
@@ -93,6 +97,9 @@ begin
   if options[:excel]
     mt.write_xlsx
   end
+
+  puts "Updating failed extractions...".yellow
+  mt.update_failed_extractions
 
   puts "Done".green
 

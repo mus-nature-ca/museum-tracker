@@ -181,6 +181,13 @@ class MuseumTracker
     end
   end
 
+  def update_failed_extractions
+    @db[:citations].where(status: 2).each do |citation|
+      citation[:status] = 5
+      update_citation(citation)
+    end
+  end
+
   def update_metadata
     bibtex = []
     sql = "SELECT
@@ -405,27 +412,29 @@ class MuseumTracker
   def queued_request(citation)
     pdf = citation_pdf(citation)
     url = citation[:url]
-    downloaded_file = File.open pdf, 'wb'
+    begin
+      downloaded_file = File.open pdf, 'wb'
 
-    req = Typhoeus::Request.new(url, followlocation: true)
-    req.on_body do |chunk|
-      chunk.encode!("UTF-8", invalid: :replace, undef: :replace)
-      downloaded_file.write(chunk)
-    end
-    req.on_complete do |response|
-      downloaded_file.close
-      if valid_pdf(pdf)
-        citation[:status] = 3
-        update_citation(citation)
-      else
-        citation[:status] = 1
-        doi = extract_doi(File.read(pdf))
-        if citation[:doi].nil? && doi
-          citation[:doi] = doi
-        end
-        File.delete pdf
-        update_citation(citation)
+      req = Typhoeus::Request.new(url, followlocation: true)
+      req.on_body do |chunk|
+        downloaded_file.write(chunk)
       end
+      req.on_complete do |response|
+        downloaded_file.close
+        if valid_pdf(pdf)
+          citation[:status] = 3
+          update_citation(citation)
+        else
+          citation[:status] = 1
+          doi = extract_doi(File.read(pdf))
+          if citation[:doi].nil? && doi
+            citation[:doi] = doi
+          end
+          File.delete pdf
+          update_citation(citation)
+        end
+      end
+    rescue
     end
     req
   end
