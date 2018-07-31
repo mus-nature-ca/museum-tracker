@@ -409,6 +409,7 @@ class MuseumTracker
 
     req = Typhoeus::Request.new(url, followlocation: true)
     req.on_body do |chunk|
+      chunk.encode!("UTF-8", invalid: :replace, undef: :replace)
       downloaded_file.write(chunk)
     end
     req.on_complete do |response|
