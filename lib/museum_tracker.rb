@@ -157,10 +157,11 @@ class MuseumTracker
 
     @db[:citations].where(status: 3).each do |citation|
       ee.source = citation_pdf(citation)
-      citation[:possible_authorship] = ee.entities[:possible_authorship]
-      citation[:possible_citation] = ee.entities[:possible_citation]
-      specimens = ee.entities[:museum_codes]
-      orcids = ee.entities[:orcids]
+      citation[:possible_authorship] = ee.authored?
+      citation[:possible_citation] = ee.cited?
+      entities = ee.entities
+      specimens = entities[:museum_codes]
+      orcids = entities[:orcids]
 
       if specimens.count > 0
         bulk = Array.new(specimens.count, citation[:id]).zip(specimens)
@@ -172,8 +173,8 @@ class MuseumTracker
         @db[:orcids].import([:citation_id, :orcid], bulk)
       end
 
-      if citation[:doi].nil? && !ee.entities[:doi].nil?
-        citation[:doi] = ee.entities[:doi]
+      if citation.doi.nil? && !ee.doi.nil?
+        citation[:doi] = ee.doi
       end
 
       citation[:status] = 4

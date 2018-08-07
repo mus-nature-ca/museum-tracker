@@ -53,61 +53,82 @@ class EntityExtractor
     end
   end
 
+  def first_page_text
+    page_text.first
+  end
+
+  def first_npages_text(n=2)
+    page_text.first(n).join("\n")
+  end
+
+  def last_npages_text(n=2)
+    page_text.last(n).join("\n")
+  end
+
+  def all_pages_text
+    page_text.join("\n")
+  end
+
+  def authored?
+    contains_search_phrase?(first_page_text)
+  end
+
+  def cited?
+    contains_search_phrase?(last_npages_text)
+  end
+
+  def doi
+    dois(first_npages_text).first
+  end
+
   def entities
-    first_page = page_text.first
-    first_2_pages = page_text.first(2).join("\n")
-    last_2_pages = page_text.last(2).join("\n")
-    all_pages = page_text.join("\n")
-    { doi: dois(first_2_pages).first,
-      possible_authorship: contains_phrase?(first_page),
-      possible_citation: contains_phrase?(last_2_pages),
-      museum_codes: specimen_codes(all_pages),
-      dois: dois(all_pages),
-      orcids: orcids(all_pages),
-      coordinates: coordinates(all_pages)
+    { museum_codes: museum_codes,
+      dois: dois,
+      orcids: orcids,
+      coordinates: coordinates
     }
   end
 
-  def contains_phrase?(txt)
-    if !@options[:search_phrase_regex]
-      raise RuntimeError, 'Missing :search_phrase_regex in option'
-    end
-    !!txt.match(@options[:search_phrase_regex])
-  end
-
-  def specimen_codes(txt)
+  def museum_codes
     if !@options[:specimen_codes_regex]
       raise RuntimeError, 'Missing :specimen_codes_regex in option'
     end
-    txt.scan(@options[:specimen_codes_regex])
+    all_pages_text.scan(@options[:specimen_codes_regex])
        .flatten.map{|o| o.strip.gsub(/\s+/, " ") }.uniq.sort
   end
 
-  def orcids(txt)
+  def orcids
     orcid_pattern = /\d{4}-\d{4}-\d{4}-\d{3}[0-9X]/
-    txt.scan(orcid_pattern).flatten.uniq
+    all_pages_text.scan(orcid_pattern).flatten.uniq
   end
 
-  def dois(txt)
+  def dois(txt = all_pages_text)
     doi_pattern = /(10[.][0-9]{4,}(?:[.][0-9]+)*\/(?:(?![%"#?' ])\S)+)/i
     txt.scan(doi_pattern).flatten.uniq
   end
 
-  def coordinates(txt)
+  def coordinates
     #dd coordinates
     coords = []
     coord_pattern_dd = /([-+]?\d{1,2}[.]\d+)[d°º]?[NS]?,\s*([-+]?\d{1,3}[.]\d+)[d°º]?[EWO]?/
-    coords << txt.scan(coord_pattern_dd)
+    coords << all_pages_text.scan(coord_pattern_dd)
                 .map{|o| { lat: o[0].to_f, lng: o[1].to_f }}
 
     #dms coordinates
     coord_pattern_dms = /([0-9]{1,2})[d°º]([0-9]{1,2}(?:\.[0-9]+){0,1})?\s*?[m'′]?([0-9]{1,2}(?:\.[0-9]+){0,1})?[s"″]?\s*([NS]),\s*([0-9]{1,3})[d°º]([0-9]{1,2}(?:\.[0-9]+){0,1})?\s*?[m'′]?([0-9]{1,2}(?:\.[0-9]+){0,1})?[s"″]?\s*?([EWO])/
-    coords << txt.scan(coord_pattern_dms)
+    coords << all_pages_text.scan(coord_pattern_dms)
                  .map{|o| convert_dms(o)}
     coords.uniq.flatten
   end
 
   private
+
+  def contains_search_phrase?(txt)
+    if !@options[:search_phrase_regex]
+      raise RuntimeError, 'Missing :search_phrase_regex in option'
+    end
+    !!txt.match(@options[:search_phrase_regex])
+  end
 
   def convert_dms(o)
     lat_prefix = 1
