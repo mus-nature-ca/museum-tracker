@@ -20,16 +20,19 @@ class EntityExtractor
   attr_accessor :options
 
   def initialize(src = '', options = {})
-    self.source = src
+    self.src = src
     self.options = options
   end
 
-  def source=(src)
-    if src != '' && File.extname(src) != ".pdf"
-      raise RuntimeError, 'File must be a PDF'
+  def src=(src)
+    @src = src
+    if File.exists?(src) && File.extname(src) != ".pdf"
+      @page_text = []
+    elsif src.kind_of? String
+      @page_text = [src]
+    else
+      raise RuntimeError, 'File must be a PDF or you must pass text'
     end
-    @page_text = []
-    @source = src
   end
 
   def options=(options)
@@ -42,11 +45,11 @@ class EntityExtractor
   end
 
   def page_text
-    raise RuntimeError, 'Source has not been set' if @source == ''
+    raise RuntimeError, 'Source has not been set' if @src == ''
     return @page_text if !@page_text.empty?
 
     begin
-      reader = PDF::Reader.new(@source)
+      reader = PDF::Reader.new(@src)
       @page_text = reader.pages.map(&:text)
     rescue
       @page_text = ocr
@@ -146,7 +149,7 @@ class EntityExtractor
 
   def ocr
     doc = {}
-    pdf = MiniMagick::Image.open(@source)
+    pdf = MiniMagick::Image.open(@src)
     Parallel.map(pdf.pages.each_with_index, in_threads: 8) do |page, idx|
       tmpfile = Tempfile.new(['', '.tif'])
       MiniMagick::Tool::Convert.new do |convert|

@@ -18,6 +18,14 @@ class MuseumTracker
       )
   end
 
+  def citations
+    @db[:citations]
+  end
+
+  def specimens
+    @db[:specimens]
+  end
+
   def new_gmail_citations
     service = Google::Apis::GmailV1::GmailService.new
     service.client_options.application_name = @config[:gmail][:application_name]
@@ -97,7 +105,7 @@ class MuseumTracker
 
   def queue_and_run
     hydra = Typhoeus::Hydra.hydra
-    @db[:citations].where(status: 0).all.in_groups_of(5, false).each do |group|
+    citations.where(status: 0).all.in_groups_of(5, false).each do |group|
       group.each do |citation|
         req = queued_request(citation)
         hydra.queue req if !req.nil?
@@ -107,7 +115,7 @@ class MuseumTracker
   end
 
   def send_unpaywall_requests
-    @db[:citations].where(status: 1).exclude(doi: nil).each do |citation|
+    citations.where(status: 1).exclude(doi: nil).each do |citation|
       url = UNPAYWALL_URL + citation[:doi] + "?email=#{@config[:gmail][:email_address]}"
       req = Typhoeus.get(url)
       json = JSON.parse(req.response_body, symbolize_names: true)
@@ -137,7 +145,7 @@ class MuseumTracker
   end
 
   def send_crossref_requests
-    @db[:citations].where(status: [1,2]).exclude(doi: nil).each do |citation|
+    citations.where(status: [1,2]).exclude(doi: nil).each do |citation|
       begin
         work = Serrano.works(ids: citation[:doi]).first
         work["message"]["link"].each do |url|
@@ -155,7 +163,7 @@ class MuseumTracker
     yaml = File.join(root, 'regex.yml')
     ee = EntityExtractor.new("", { yaml: yaml })
 
-    @db[:citations].where(status: 3).each do |citation|
+    citations.where(status: 3).each do |citation|
       ee.source = citation_pdf(citation)
       citation[:possible_authorship] = ee.authored?
       citation[:possible_citation] = ee.cited?
@@ -165,7 +173,7 @@ class MuseumTracker
 
       if specimens.count > 0
         bulk = Array.new(specimens.count, citation[:id]).zip(specimens)
-        @db[:specimens].import([:citation_id, :specimen_code], bulk)
+        specimens.import([:citation_id, :specimen_code], bulk)
       end
 
       if orcids.count > 0
@@ -183,41 +191,27 @@ class MuseumTracker
   end
 
   def update_failed_extractions
-    @db[:citations].where(status: 2).each do |citation|
+    citations.where(status: 2).each do |citation|
       citation[:status] = 5
       update_citation(citation)
     end
   end
 
   def update_metadata
-    bibtex = []
-    sql = "SELECT
-      c.id, c.doi
-    FROM citations c 
-    LEFT JOIN metadata m ON c.id = m.citation_id 
-    WHERE m.id IS NULL AND c.doi IS NOT NULL"
-    @db[sql].each do |row|
-      bib = doi_metadata(row[:doi], "bibtex") rescue nil
-      formatted = doi_metadata(row[:doi], "biblio") rescue nil
-      json = JSON.parse(doi_metadata(row[:doi], "csl+json")) rescue nil
-      print_date = format_pub_date(json["published-print"]["date-parts"][0].join("-")) rescue nil
-      if print_date.nil?
-        print_date = format_pub_date(json["published-online"]["date-parts"][0].join("-")) rescue nil
+    citations.where(formatted: nil).exclude(doi: nil).each do |citation|
+      citation[:bibtex] = doi_metadata(citation[:doi], "bibtex") rescue nil
+      citation[:formatted] = doi_metadata(citation[:doi], "biblio") rescue nil
+      json = JSON.parse(doi_metadata(citation[:doi], "csl+json")) rescue nil
+      citation[:print_date] = format_pub_date(json["published-print"]["date-parts"][0].join("-")) rescue nil
+      if citation[:print_date].nil?
+        citation[:print_date] = format_pub_date(json["published-online"]["date-parts"][0].join("-")) rescue nil
       end
-      year = BibTeX.parse(bib).first.year.to_i rescue nil
-      data = {
-        citation_id: row[:id],
-        year: year,
-        print_date: print_date,
-        bibtex: bib,
-        formatted: formatted
-      }
-      @db[:metadata].insert(data)
-      if bib && formatted
-        bibtex << data
+      citation[:year] = BibTeX.parse(citation[:bibtex]).first.year.to_i rescue nil
+      if [citation[:year], citation[:bibtex]].compact.empty?
+        citation[:formatted] = ""
       end
+      update_citation(citation)
     end
-    bibtex
   end
 
   def write_csv
@@ -274,17 +268,15 @@ class MuseumTracker
         c.license,
         c.possible_authorship,
         c.possible_citation,
-        m.formatted,
-        m.print_date,
+        c.formatted,
+        c.print_date,
         c.created 
       FROM 
         citations c 
-      LEFT JOIN 
-        metadata m ON (c.id = m.citation_id) 
-      ORDER BY m.print_date DESC"
+      ORDER BY c.print_date DESC"
     @db[sql].each do |row|
       extras = { 
-        specimens: @db[:specimens].where(citation_id: row[:id])
+        specimens: specimens.where(citation_id: row[:id])
                                   .all.map{ |s| s[:specimen_code] }
                                   .join(", "),
         orcids: @db[:orcids].where(citation_id: row[:id])
@@ -353,13 +345,13 @@ class MuseumTracker
   end
 
   def insert_citation(citation)
-    @db[:citations].insert(citation)
+    citations.insert(citation)
   end
 
   def update_citation(citation)
     md5 = citation[:md5]
     citation.delete(:md5)
-    @db[:citations].where(md5: md5).update(citation)
+    citations.where(md5: md5).update(citation)
   end
 
   def gmail_authorize
