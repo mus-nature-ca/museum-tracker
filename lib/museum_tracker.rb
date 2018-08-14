@@ -114,6 +114,7 @@ class MuseumTracker
     end
   end
 
+  #TODO: get ORCID data from unpaywall as well
   def send_unpaywall_requests
     citations.where(status: 1).exclude(doi: nil).each do |citation|
       url = UNPAYWALL_URL + citation[:doi] + "?email=#{@config[:gmail][:email_address]}"
