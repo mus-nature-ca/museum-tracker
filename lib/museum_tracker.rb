@@ -164,15 +164,15 @@ class MuseumTracker
     ee = EntityExtractor.new("", { yaml: yaml })
 
     citations.where(status: 3).each do |citation|
-      ee.source = citation_pdf(citation)
+      ee.src = citation_pdf(citation)
       citation[:possible_authorship] = ee.authored?
       citation[:possible_citation] = ee.cited?
       entities = ee.entities
-      specimens = entities[:museum_codes]
+      found_specimens = entities[:museum_codes]
       orcids = entities[:orcids]
 
-      if specimens.count > 0
-        bulk = Array.new(specimens.count, citation[:id]).zip(specimens)
+      if found_specimens.count > 0
+        bulk = Array.new(found_specimens.count, citation[:id]).zip(found_specimens)
         specimens.import([:citation_id, :specimen_code], bulk)
       end
 
@@ -181,7 +181,7 @@ class MuseumTracker
         @db[:orcids].import([:citation_id, :orcid], bulk)
       end
 
-      if citation.doi.nil? && !ee.doi.nil?
+      if citation[:doi].nil? && !ee.doi.nil?
         citation[:doi] = ee.doi
       end
 

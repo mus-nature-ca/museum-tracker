@@ -26,7 +26,7 @@ class EntityExtractor
 
   def src=(src)
     @src = src
-    if File.exists?(src) && File.extname(src) != ".pdf"
+    if File.exists?(src) && File.extname(src) == ".pdf"
       @page_text = []
     elsif src.kind_of? String
       @page_text = [src]
