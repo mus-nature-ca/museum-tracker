@@ -16,9 +16,8 @@ mt = MuseumTracker.new({ config_file: config_file })
 mt.citations.each do |citation|
   pdf = File.join($pdf_dir, "#{citation[:md5]}.pdf")
   file_name = File.basename(pdf)
-  year = mt.metadata.where(citation_id: citation[:id]).first[:year]
 
-  if File.exists?(pdf) && year == 2018
+  if File.exists?(pdf) && citation[:year] == 2018
     `pdftk #{pdf} cat 1 output #{$pdf_dir}/first_page/#{file_name}`
     if mt.specimens.where(citation_id: citation[:id]).count > 0
       make_stamp("cited_specimens", file_name)
@@ -28,6 +27,9 @@ mt.citations.each do |citation|
     end
     if citation[:possible_authorship]
       make_stamp("authored", file_name)
+    end
+    if !citation[:topics].nil?
+      make_stamp(citation[:topics], file_name)
     end
   end
   puts citation[:id]

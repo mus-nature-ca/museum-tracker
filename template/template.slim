@@ -68,7 +68,7 @@ html
                 td.info = entry[:specimens]
               - else
                 td
-              td 
+              td data-md5 = entry[:md5]
                 = entry[:formatted]
                 - if entry[:formatted]
                   br

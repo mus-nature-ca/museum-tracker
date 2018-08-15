@@ -238,7 +238,7 @@ class MuseumTracker
 
     row = 1
     output[:entries].each do |entry|
-      (0..9).each do |i|
+      (0..10).each do |i|
         worksheet.write(row, i, entry[output_header[i].to_sym])
       end 
       row += 1
@@ -264,6 +264,7 @@ class MuseumTracker
     }
     sql = "SELECT 
         c.id,
+        c.md5,
         c.doi,
         c.url,
         c.license,
@@ -291,6 +292,7 @@ class MuseumTracker
 
   def output_header
     [
+      "md5",
       "doi",
       "url",
       "license",
