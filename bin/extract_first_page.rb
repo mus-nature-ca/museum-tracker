@@ -28,8 +28,8 @@ mt.citations.each do |citation|
     if citation[:possible_authorship]
       make_stamp("authored", file_name)
     end
-    if !citation[:topics].nil?
-      make_stamp(citation[:topics], file_name)
+    if !citation[:keywords].nil?
+      make_stamp(citation[:keywords], file_name)
     end
   end
   puts citation[:id]
