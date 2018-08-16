@@ -36,6 +36,7 @@ CREATE TABLE `citations` (
   `print_date` varchar(100) DEFAULT NULL,
   `bibtex` text,
   `formatted` text,
+  `keywords` text,
   `created` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

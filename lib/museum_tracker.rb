@@ -272,7 +272,7 @@ class MuseumTracker
         c.possible_authorship,
         c.possible_citation,
         c.print_date,
-        c.topics,
+        c.keywords,
         c.created 
       FROM 
         citations c 
@@ -301,7 +301,7 @@ class MuseumTracker
       "possible_authorship",
       "possible_citation",
       "print_date",
-      "topics",
+      "keywords",
       "created",
       "specimens",
       "orcids"
