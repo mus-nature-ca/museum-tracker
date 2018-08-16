@@ -268,10 +268,11 @@ class MuseumTracker
         c.doi,
         c.url,
         c.license,
+        c.formatted,
         c.possible_authorship,
         c.possible_citation,
-        c.formatted,
         c.print_date,
+        c.topics,
         c.created 
       FROM 
         citations c 
@@ -300,6 +301,7 @@ class MuseumTracker
       "possible_authorship",
       "possible_citation",
       "print_date",
+      "topics",
       "created",
       "specimens",
       "orcids"
