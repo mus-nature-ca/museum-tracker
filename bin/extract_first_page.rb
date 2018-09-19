@@ -4,6 +4,22 @@ require File.dirname(File.dirname(__FILE__)) + '/environment.rb'
 config_file = File.join(File.dirname(File.dirname(__FILE__)), 'config.yml')
 raise "Config file not found" unless File.exists?(config_file)
 
+options = {}
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: app.rb [options]"
+
+  opts.on("-h", "--help", "Prints this help") do
+    puts opts
+    exit
+  end
+
+  opts.on("-k", "--keyword [KEYWORD]", String, "Produce first page for papger by keyword") do |keyword|
+    options[:keyword] = keyword
+  end
+
+end.parse!
+
 $pdf_dir = File.join(File.dirname(File.dirname(__FILE__)), 'pdfs')
 
 def make_stamp(template, file_name)
@@ -13,7 +29,15 @@ end
 
 mt = MuseumTracker.new({ config_file: config_file })
 
-mt.citations.each do |citation|
+bundle = mt.citations
+compiled_name = "all_first_pages"
+
+if options[:keyword]
+  bundle = mt.database["SELECT * FROM citations MATCH (keywords) AGAINST ('+#{options[:keyword]}' IN BOOLEAN MODE)"]
+  compiled_name = "#{options[:keyword]}_first_pages"
+end
+
+bundle.each do |citation|
   pdf = File.join($pdf_dir, "#{citation[:md5]}.pdf")
   file_name = File.basename(pdf)
 
@@ -35,6 +59,6 @@ mt.citations.each do |citation|
   puts citation[:id]
 end
 
-`pdftk #{$pdf_dir}/first_page/*.pdf cat output #{$pdf_dir}/all_first_pages.pdf`
+`pdftk #{$pdf_dir}/first_page/*.pdf cat output #{$pdf_dir}/#{compiled_name}.pdf`
 
 FileUtils.rm_rf Dir.glob("#{$pdf_dir}/first_page/*.pdf")

@@ -18,6 +18,10 @@ class MuseumTracker
       )
   end
 
+  def database
+    @db
+  end
+
   def citations
     @db[:citations]
   end
