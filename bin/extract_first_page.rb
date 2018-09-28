@@ -53,7 +53,13 @@ bundle.each do |citation|
       make_stamp("authored", file_name)
     end
     if !citation[:keywords].nil?
-      make_stamp(citation[:keywords], file_name)
+      accepted_keywords = ["botany", "mineralogy", "other", "palaeontology", "zoology"]
+      citation[:keywords].split(",").each do |k|
+        keyword = k.strip
+        if accepted_keywords.include?(keyword)
+          make_stamp(keyword, file_name)
+        end
+      end
     end
   end
   puts citation[:id]
