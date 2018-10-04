@@ -11,6 +11,7 @@ html
     script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"
     script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
     script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"
+    script src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"
     css:
       .success{text-align:center;}
       .orcid{vertical-align:middle; margin-right:4px;}
@@ -52,6 +53,7 @@ html
             th(style="width:45%") Reference
             th(style="width:5%;text-align:center") License
             th(style="width:10%") Created
+            th Altmetrics
         tbody
           - entries.each do |entry|
             tr
@@ -88,3 +90,6 @@ html
                     a href="https://orcid.org/#{orcid}" == "https://orcid.org/#{orcid}"
               td = entry[:license]
               td = entry[:created]
+              td
+                - if entry[:doi]
+                  div.altmetric-embed[data-badge-popover="left" data-badge-type="donut" data-doi="#{entry[:doi]}" data-hide-no-mentions="true"]
