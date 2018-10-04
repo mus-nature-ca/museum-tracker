@@ -17,9 +17,12 @@ html
       .orcid{vertical-align:middle; margin-right:4px;}
     javascript:
       $(function() {
-        $('#citations').DataTable({
+        var dataTable = $('#citations').DataTable({
           order: [[6, "desc"]],
           "pageLength": 100
+        });
+        dataTable.on('draw', function() {
+          _altmetric_embed_init();
         });
       });
 
@@ -92,4 +95,4 @@ html
               td = entry[:created]
               td
                 - if entry[:doi]
-                  div.altmetric-embed[data-badge-popover="left" data-badge-type="donut" data-doi="#{entry[:doi]}" data-hide-no-mentions="true"]
+                  div.altmetric-embed[data-badge-details="right" data-badge-type="donut" data-doi="#{entry[:doi]}" data-hide-no-mentions="true" data-condensed="true"]
