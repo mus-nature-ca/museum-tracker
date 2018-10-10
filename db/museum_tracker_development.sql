@@ -1,3 +1,11 @@
+-- phpMyAdmin SQL Dump
+-- version 4.8.0.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: Oct 10, 2018 at 03:40 PM
+-- Server version: 5.7.22
+-- PHP Version: 5.6.36
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -13,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `cmn_scholar`
 --
-CREATE DATABASE IF NOT EXISTS `museum_tracker_development` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `museum_tracker_development`;
 
 -- --------------------------------------------------------
 
@@ -22,7 +28,6 @@ USE `museum_tracker_development`;
 -- Table structure for table `citations`
 --
 
-DROP TABLE IF EXISTS `citations`;
 CREATE TABLE `citations` (
   `id` int(11) NOT NULL,
   `md5` varchar(32) NOT NULL,
@@ -37,6 +42,7 @@ CREATE TABLE `citations` (
   `bibtex` text,
   `formatted` text,
   `keywords` text,
+  `countries` text,
   `created` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -46,7 +52,6 @@ CREATE TABLE `citations` (
 -- Table structure for table `orcids`
 --
 
-DROP TABLE IF EXISTS `orcids`;
 CREATE TABLE `orcids` (
   `id` int(11) NOT NULL,
   `citation_id` int(11) NOT NULL,
@@ -59,7 +64,6 @@ CREATE TABLE `orcids` (
 -- Table structure for table `specimens`
 --
 
-DROP TABLE IF EXISTS `specimens`;
 CREATE TABLE `specimens` (
   `id` int(11) NOT NULL,
   `citation_id` int(11) NOT NULL,
@@ -76,6 +80,8 @@ CREATE TABLE `specimens` (
 ALTER TABLE `citations`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `md5` (`md5`);
+ALTER TABLE `citations` ADD FULLTEXT KEY `keywords_idx` (`keywords`);
+ALTER TABLE `citations` ADD FULLTEXT KEY `countries_idx` (`countries`);
 
 --
 -- Indexes for table `orcids`
@@ -97,19 +103,19 @@ ALTER TABLE `specimens`
 -- AUTO_INCREMENT for table `citations`
 --
 ALTER TABLE `citations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=465;
 
 --
 -- AUTO_INCREMENT for table `orcids`
 --
 ALTER TABLE `orcids`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `specimens`
 --
 ALTER TABLE `specimens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=435;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
