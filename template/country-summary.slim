@@ -1,0 +1,54 @@
+doctype html
+html
+  head
+    title Canadian Museum of Nature Citation Tracker Country Summary 2018
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    meta name="ROBOTS" content="NOINDEX, NOFOLLOW"
+    link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"
+    link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css"
+    script src="https://code.jquery.com/jquery-1.12.4.js"
+    script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"
+    script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
+    script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"
+    script src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"
+    css:
+      .success{text-align:center;}
+      .orcid{vertical-align:middle; margin-right:4px;}
+    javascript:
+      $(function() {
+        var dataTable = $('#citations').DataTable({
+          paging: false,
+          searching: false
+        });
+      });
+
+  body
+    .container-fluid
+      .jumbotron
+        h1 Canadian Museum of Nature Citation Tracker Country Summary 2018
+        p.lede 
+          strong Started
+          ': 2017-11-25; 
+          strong Last generated
+          ': #{generation_time}; 
+        p.lede
+          | This project is in incubation status, is incomplete, and is unstable. It has yet to be fully endorsed by the Canadian Museum of Nature and is unlikely to persist. Download a 
+          a href="public/publications.csv" csv
+          |  or an 
+          a href="public/publications.xlsx" Excel file
+          |  and get the 
+          a href="https://github.com/mus-nature-ca/museum-tracker" code
+          |. 
+          a href="/country-summary.html" Country Summary
+
+      table#citations.table.table-striped.table-bordered
+        thead
+          tr
+            th Country
+            th Number of Published Works
+        tbody
+          - entries.each do |entry|
+            tr
+              td #{entry[:country]}
+              td #{entry[:count]}
