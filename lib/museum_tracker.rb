@@ -242,7 +242,7 @@ class MuseumTracker
 
     row = 1
     output[:entries].each do |entry|
-      (0..11).each do |i|
+      (0..12).each do |i|
         worksheet.write(row, i, entry[output_header[i].to_sym])
       end 
       row += 1
@@ -277,6 +277,7 @@ class MuseumTracker
         c.possible_citation,
         c.print_date,
         c.keywords,
+        c.countries,
         c.created 
       FROM 
         citations c 
@@ -308,7 +309,8 @@ class MuseumTracker
       "keywords",
       "created",
       "specimens",
-      "orcids"
+      "orcids",
+      "countries"
     ]
   end
 
