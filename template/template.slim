@@ -29,7 +29,7 @@ html
   body
     .container-fluid
       .jumbotron
-        h1 Canadian Museum of Nature Citation Tracker
+        h1 Citation Tracker
         p.lede 
           strong Started
           ': 2017-11-25; 
@@ -38,13 +38,11 @@ html
           strong Total
           ': #{entries.count}
         p.lede
-          | This project is in incubation status, is incomplete, and is unstable. It has yet to be fully endorsed by the Canadian Museum of Nature and is unlikely to persist. Download a 
+          | Download a 
           a href="public/publications.csv" csv
           |  or an 
-          a href="public/publications.xlsx" Excel file
-          |  and get the 
-          a href="https://github.com/mus-nature-ca/museum-tracker" code
-          |. 
+          a href="public/publications.xlsx" Excel
+          |  file. 
           a href="/country-summary.html" Country Summary
 
       table#citations.table.table-striped.table-bordered
@@ -87,10 +85,15 @@ html
                   a href="https://doi.org/#{entry[:doi]}" == "https://doi.org/#{entry[:doi]}"
                 - if entry[:doi] && entry[:url].nil?
                   a href="https://doi.org/#{entry[:doi]}" == "https://doi.org/#{entry[:doi]}"
+                - if entry[:pdf_exists] == true
+                  br
+                  a href="pdfs/#{entry[:md5]}.pdf"
+                      img src="images/pdf_icon.png" class="orcid" alt="PDF"/
+                  a href="pdfs/#{entry[:md5]}.pdf" == "Download PDF"
                 - entry[:orcids].split(", ").each do |orcid|
                     br
                     a href="https://orcid.org/#{orcid}"
-                        img src="images/orcid_16X16.gif" class="orcid"/
+                        img src="images/orcid_16X16.gif" class="orcid" alt="ORCID"/
                     a href="https://orcid.org/#{orcid}" == "https://orcid.org/#{orcid}"
               td = entry[:license]
               td = entry[:created]

@@ -283,13 +283,15 @@ class MuseumTracker
         citations c 
       ORDER BY c.print_date DESC"
     @db[sql].each do |row|
+      pdf_exists = File.exists?(File.join(root, 'pdfs', "#{row[:md5]}.pdf")) ? true : false
       extras = { 
         specimens: specimens.where(citation_id: row[:id])
                                   .all.map{ |s| s[:specimen_code] }
                                   .join(", "),
         orcids: @db[:orcids].where(citation_id: row[:id])
                             .select_map(:orcid)
-                            .join(", ")
+                            .join(", "),
+        pdf_exists: pdf_exists
       }
       data[:entries] << row.merge(extras)
     end
