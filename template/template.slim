@@ -88,7 +88,7 @@ html
                 - if entry[:pdf_exists] == true
                   br
                   a href="pdfs/#{entry[:md5]}.pdf"
-                      img src="images/pdf_icon.png" class="orcid" alt="PDF"/
+                      img src="images/pdf.png" height="24" class="orcid" alt="PDF"/
                   a href="pdfs/#{entry[:md5]}.pdf" == "Download PDF"
                 - entry[:orcids].split(", ").each do |orcid|
                     br
