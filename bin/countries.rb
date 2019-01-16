@@ -24,7 +24,7 @@ end
 def make_webpage(year = Time.new.year)
   root = File.dirname(File.dirname(__FILE__))
   template = File.join(root, 'template', "country-summary.slim")
-  web_page = File.join(root, 'country-summary.html')
+  web_page = File.join(root, "country-summary-#{year}.html")
   html = Slim::Template.new(template).render(Object.new, collect_data(year))
   File.open(web_page, 'w') { |file| file.write(html) }
   html
