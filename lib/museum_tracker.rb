@@ -219,6 +219,13 @@ class MuseumTracker
     end
   end
 
+  def update_reference_style(style)
+    citations.exclude(doi: nil).each do |citation|
+      citation[:formatted] = doi_metadata(citation[:doi], "biblio", style) rescue nil
+      update_citation(citation)
+    end
+  end
+
   def write_csv
     csv_file = File.join(root, 'public', 'publications.csv')
     CSV.open(csv_file, 'w') do |csv|
@@ -326,24 +333,24 @@ class MuseumTracker
     config[env.to_sym]
   end
 
-  def doi_metadata(doi, style = 'biblio')
+  def doi_metadata(doi, output_format = 'biblio', style = 'apa')
     url = "https://doi.org/" + URI.escape(doi)
 
-    case style
+    case output_format
     when 'biblio'
-      header = { Accept: "text/x-bibliography" }
+      header = { Accept: "text/x-bibliography; style=#{style}" }
     when 'bibtex'
       header = { Accept: "application/x-bibtex" }
     when 'csl+json'
       header = { Accept: "application/vnd.citationstyles.csl+json" }
     else
-      header = { Accept: "text/x-bibliography" }
+      header = { Accept: "text/x-bibliography; style=#{style}" }
     end
 
     begin
       req = Typhoeus.get(url, headers: header, followlocation: true)
       if req.response_code == 200
-        req.response_body
+        req.response_body.gsub!(/doi\:\s*/i, "https://doi.org/")
       else
         nil
       end

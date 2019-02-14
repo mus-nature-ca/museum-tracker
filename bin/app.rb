@@ -46,6 +46,10 @@ optparse = OptionParser.new do |opts|
     options[:url] = url
   end
 
+  opts.on("-s", "--style [style]", String, "Update all references according to specified style") do |style|
+    options[:style] = style
+  end
+
 end
 
 begin
@@ -86,6 +90,11 @@ begin
   
   puts "Updating metadata...".yellow
   mt.update_metadata
+
+  if options[:style]
+    puts "Updating all citations to chosen style...".yellow
+    mt.update_reference_style(options[:style])
+  end
 
   puts "Writing webpage...".yellow
   mt.write_webpage
