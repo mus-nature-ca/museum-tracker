@@ -283,6 +283,7 @@ class MuseumTracker
         c.possible_authorship,
         c.possible_citation,
         c.print_date,
+        c.year,
         c.keywords,
         c.countries,
         c.created 
@@ -315,6 +316,7 @@ class MuseumTracker
       "possible_authorship",
       "possible_citation",
       "print_date",
+      "year",
       "keywords",
       "created",
       "specimens",
