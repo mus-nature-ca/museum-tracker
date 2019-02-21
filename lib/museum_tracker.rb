@@ -249,9 +249,9 @@ class MuseumTracker
 
     row = 1
     output[:entries].each do |entry|
-      (0..13).each do |i|
+      (0..14).each do |i|
         worksheet.write(row, i, entry[output_header[i].to_sym])
-      end 
+      end
       row += 1
     end
 
@@ -292,6 +292,7 @@ class MuseumTracker
       ORDER BY c.print_date DESC"
     @db[sql].each do |row|
       pdf_exists = File.exists?(File.join(root, 'pdfs', "#{row[:md5]}.pdf")) ? true : false
+      pdf_url = pdf_exists ? "http://ntracker-01/pdfs/#{row[:md5]}.pdf" : nil
       extras = { 
         specimens: specimens.where(citation_id: row[:id])
                                   .all.map{ |s| s[:specimen_code] }
@@ -299,7 +300,8 @@ class MuseumTracker
         orcids: @db[:orcids].where(citation_id: row[:id])
                             .select_map(:orcid)
                             .join(", "),
-        pdf_exists: pdf_exists
+        pdf_exists: pdf_exists,
+        pdf_url: pdf_url
       }
       data[:entries] << row.merge(extras)
     end
@@ -321,7 +323,8 @@ class MuseumTracker
       "created",
       "specimens",
       "orcids",
-      "countries"
+      "countries",
+      "pdf_url"
     ]
   end
 
