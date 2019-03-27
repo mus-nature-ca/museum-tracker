@@ -203,7 +203,7 @@ class MuseumTracker
   end
 
   def update_metadata
-    citations.where(formatted: nil).exclude(doi: nil).each do |citation|
+    citations.where(formatted: [nil,""]).exclude(doi: nil).each do |citation|
       citation[:bibtex] = doi_metadata(citation[:doi], "bibtex") rescue nil
       citation[:formatted] = doi_metadata(citation[:doi], "biblio") rescue nil
       json = JSON.parse(doi_metadata(citation[:doi], "csl+json")) rescue nil
