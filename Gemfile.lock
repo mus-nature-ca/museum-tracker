@@ -89,7 +89,7 @@ GEM
     rtesseract (2.2.0)
       nokogiri
     ruby-rc4 (0.1.5)
-    rubyzip (1.2.2)
+    rubyzip (2.0.0)
     sequel (5.15.0)
     serrano (0.5.0)
       faraday (~> 0.14.0)
