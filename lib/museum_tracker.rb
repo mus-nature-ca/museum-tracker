@@ -356,7 +356,7 @@ class MuseumTracker
   end
 
   def insert_citation(citation)
-    citations.insert(citation)
+    citations.insert(citation) rescue nil
   end
 
   def update_citation(citation)
