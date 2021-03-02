@@ -243,7 +243,7 @@ class MuseumTracker
     row = 1
     output[:entries].each do |entry|
       (0..12).each do |i|
-        worksheet.write(row, i, entry[output_header[i].to_sym])
+        worksheet.write(row, i, entry[output_header[i].to_sym]) rescue nil
       end 
       row += 1
     end
