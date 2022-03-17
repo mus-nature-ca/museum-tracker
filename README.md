@@ -35,7 +35,3 @@ See included [LICENSE-en](LICENSE-en) and [LICENCE-fr](LICENCE-fr).
 Disclaimer
 ----------
 This project is in incubation status, is incomplete, and is unstable. It has yet to be fully endorsed by the Canadian Museum of Nature and is unlikely to persist.
-
-Contact
--------
-David P. Shorthouse, <dshorthouse@nature.ca>
