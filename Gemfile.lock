@@ -52,12 +52,12 @@ GEM
     memoist (0.16.2)
     mini_magick (4.9.5)
     mini_mime (1.0.2)
-    mini_portile2 (2.8.0)
+    mini_portile2 (2.8.1)
     minitest (5.14.1)
     multi_json (1.14.1)
     multipart-post (2.1.1)
     mysql2 (0.5.3)
-    nokogiri (1.13.2)
+    nokogiri (1.13.10)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     os (1.0.1)
@@ -69,7 +69,7 @@ GEM
       ruby-rc4
       ttfunk
     public_suffix (4.0.6)
-    racc (1.6.0)
+    racc (1.6.2)
     rake (13.0.1)
     representable (3.0.4)
       declarative (< 0.1.0)
